@@ -1,6 +1,6 @@
 useDotenv: true
 
-service: poprox-default-recommender
+service: poprox-entities-recommender
 frameworkVersion: "3"
 
 provider:
@@ -10,7 +10,8 @@ provider:
   region: ${opt:region, "us-east-1"}
   stage: ${opt:stage, "local"}
   memorySize: 2048 # 2gb
-  timeout: 25
+  # API Gateway HTTP integrations time out at 30 seconds; stay just below it.
+  timeout: 29
   architecture: x86_64
 
   iam:
@@ -25,7 +26,7 @@ provider:
   ecr:
     # In this section you can define images that will be built locally and uploaded to ECR
     images:
-      poprox-recommender:
+      poprox-entities-recommender:
         path: "./"
         platform: linux/amd64
 
@@ -41,7 +42,7 @@ package:
 functions:
   generateRecommendations:
     image:
-      name: poprox-recommender
+      name: poprox-entities-recommender
     memorySize: 4096
     ephemeralStorageSize: 2048
     events:
